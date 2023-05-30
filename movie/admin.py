@@ -1,3 +1,19 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register, TabularInline
+from movie.models import Movie, MovieGenre
 
-# Register your models here.
+class MovieTabularInline(TabularInline): 
+    model = Movie
+
+
+
+
+@register(Movie)
+class MovieAdmin(ModelAdmin):
+    list_display = ('title', 'rate','genre')
+    list_filter = ('genre',)
+    search_fields = ('title',)
+    # inlines = [MovieTabularInline]
+    
+@register(MovieGenre)
+class GenreAdmin(ModelAdmin):
+    list_display = ('genre', )

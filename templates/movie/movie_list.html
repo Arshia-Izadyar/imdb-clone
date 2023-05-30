@@ -1,0 +1,13 @@
+{% extends 'Base.html' %}
+
+{% block title %}LOL{% endblock title %}
+{% block body %}
+
+    {% for i in movie_list %}
+        <ul><h3><a href="#">{{ i.title }}</a> genre:{{i.genre}} rate:{{i.rate}} imdb rate :{{i.imdb_rate}}</h3></ul>
+    {% endfor %}
+
+    <h4><a href=" {% url 'movie-create' %}">dont see your movie create it</a></h4>
+
+
+{% endblock body %}
