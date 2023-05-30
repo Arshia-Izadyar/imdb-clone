@@ -9,7 +9,7 @@ class MovieTabularInline(TabularInline):
 
 @register(Movie)
 class MovieAdmin(ModelAdmin):
-    list_display = ('title', 'rate','genre')
+    list_display = ('title', 'rate', 'times_rated','genre')
     list_filter = ('genre',)
     search_fields = ('title',)
     # inlines = [MovieTabularInline]

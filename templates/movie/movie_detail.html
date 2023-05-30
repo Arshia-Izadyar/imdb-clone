@@ -1,0 +1,12 @@
+{% extends 'Base.html' %}
+{% block title %}lol{% endblock title %}
+{% block body %}
+    <h1> title : {{ movie_detail.title }}</h1>
+    <h2> rate : {{ movie_detail.rate }}</h2>
+    <form method="post" >
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Update">
+    </form>
+
+{% endblock body %}

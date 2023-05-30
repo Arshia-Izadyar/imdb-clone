@@ -2,14 +2,16 @@ from django.db import models
 from django.db.models.query import QuerySet
 from lib.validator import rate_validator
 from django.contrib.auth.models import User
+from django.urls import reverse
+
+from datetime import timedelta, datetime
+
+
 
 
 class IsActiveManager(models.Manager):
     def get_queryset(self) -> QuerySet:
         return super().get_queryset()
-
-
-
 
 
 # profile
@@ -49,11 +51,19 @@ class Movie(models.Model):
     imdb_rate = models.FloatField(default=1.0, validators=[rate_validator])
     release_date = models.DateField(null=True, blank=True)
     user_creator = models.ForeignKey(User, related_name='movie_user', on_delete=models.PROTECT, null=True)
+    modified_date = models.DateField(auto_now=True)
+    next_allowed_modify = models.DateTimeField(
+            default=datetime.now()+timedelta(minutes=10)-timedelta(hours=5) # adjust for UTC
+        )
 
     objects = IsActiveManager()
     default_manager = models.Manager()
     
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse("movie-show", kwargs={"pk": self.pk})
+    
 
  
