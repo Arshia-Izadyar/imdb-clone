@@ -1,12 +1,12 @@
 {% extends 'Base.html'%}
 
-{% block title %}lol{% endblock title %}
+{% block title %}Craete Movie{% endblock title %}
 {% block body %}
     <h1>lol</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" name="ok" value="ok" />
+        <input type="submit" value="ok" />
 
 
     </form>

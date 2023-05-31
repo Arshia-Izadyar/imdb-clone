@@ -44,17 +44,15 @@ class Movie(models.Model):
     title = models.CharField(max_length=35, null=False, blank=False, unique=True)
     genre = models.ForeignKey(MovieGenre, related_name='movie', on_delete=models.PROTECT)
     recommended = models.BooleanField(default=True)
-    rate = models.PositiveSmallIntegerField(default=1, validators=[rate_validator])
+    rate = models.FloatField(default=0, validators=[rate_validator])
     description = models.TextField(blank=True, null=True)
     # TODO: add support for comments
     times_rated = models.PositiveIntegerField(default=1)
+    total_rate = models.PositiveIntegerField(default=0)
     imdb_rate = models.FloatField(default=1.0, validators=[rate_validator])
     release_date = models.DateField(null=True, blank=True)
     user_creator = models.ForeignKey(User, related_name='movie_user', on_delete=models.PROTECT, null=True)
-    modified_date = models.DateField(auto_now=True)
-    next_allowed_modify = models.DateTimeField(
-            default=datetime.now()+timedelta(minutes=10)-timedelta(hours=5) # adjust for UTC
-        )
+
 
     objects = IsActiveManager()
     default_manager = models.Manager()
@@ -64,6 +62,15 @@ class Movie(models.Model):
     
     def get_absolute_url(self):
         return reverse("movie-show", kwargs={"pk": self.pk})
+    
+    
+    def get_rate(self, rate):
+        self.times_rated += 1
+        self.total_rate += rate
+
+        self.rate = round((self.total_rate / self.times_rated), 2)
+        print(f"times_rated= {self.times_rated} total_rate= {self.total_rate} rate= {self.rate}")
+        return self.rate
     
 
  
