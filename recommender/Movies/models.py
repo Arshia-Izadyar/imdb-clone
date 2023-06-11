@@ -11,7 +11,7 @@ class GenreModel(models.Model):
 
 
 class MovieModel(models.Model):
-    title = models.CharField(max_length=40)
+    title = models.CharField(max_length=40, unique=True)
     genre = models.ForeignKey(GenreModel, related_name='movies', on_delete=models.CASCADE)
     release_year = models.DateField()
     plot = models.TextField()
