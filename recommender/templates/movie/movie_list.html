@@ -1,0 +1,11 @@
+{% extends "Base.html" %}
+{% block title %}List{% endblock title %}
+{% block body %}
+    <h1>Movie List</h1>
+    {% for movie in movies %}
+        <ul><p>{{movie.title}}</p></ul>
+    {% endfor %}
+        
+
+
+{% endblock body %}

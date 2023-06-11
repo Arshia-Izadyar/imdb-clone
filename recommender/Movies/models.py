@@ -4,6 +4,10 @@ from django.contrib.auth.models import User
 class GenreModel(models.Model):
     title = models.CharField(max_length=35)
 
+    
+    def __str__(self):
+        return self.title
+    
 
 
 class MovieModel(models.Model):
