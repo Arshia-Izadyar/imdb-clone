@@ -1,7 +1,7 @@
 DATABASE = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'movie', 
+        'NAME': 'movies', 
         'USER': 'arshia', 
         'PASSWORD': 'a123',
         'HOST': '127.0.0.1', 

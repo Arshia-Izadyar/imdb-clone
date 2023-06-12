@@ -5,9 +5,13 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views import View
+from django.db.models import Avg, Prefetch, FloatField
+from django.db.models.functions import Coalesce
 
-from .forms import MovieCreateForm, ReviewForm
-from .models import MovieModel, ReviewModel
+
+
+from .forms import MovieCreateForm, ReviewForm, CommentForm
+from .models import MovieModel, ReviewModel, CommentModel
 
 
 class MovieListView(ListView):
@@ -32,15 +36,6 @@ class MovieCreateView(FormView):
         form.save()
         return super().form_valid(form)
     
-    
-class MovieReview(View): 
-    
-    @method_decorator(login_required())
-    def dispatch(self, request, *args, **kwargs):
-        
-        return super().dispatch(request, *args, **kwargs)
-    
-from django.views.generic import DetailView
 
 class MovieReview(DetailView):
     model = MovieModel  
@@ -48,13 +43,30 @@ class MovieReview(DetailView):
     def post(self, request, *args, **kwargs):
         form = ReviewForm(request.POST)
         if form.is_valid():
+            self.object = self.get_object() 
             review = form.save(commit=False)
             review.user = self.request.user
-            review.movie = self.get_object() 
+            review.movie = self.object
             review.save()
-            return redirect('movie:list')
+            return redirect('movie:detail', pk=self.object.pk)
+        return render('movie:list')
+               
+        
+class MovieComment(DetailView):
+    model = MovieModel
+    
+    def post(self, request, *args, **kwargs):
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            self.object = self.get_object() 
+            comment = form.save(commit=False)
+            comment.user = self.request.user
+            comment.movie = self.object
+            comment.save()
+            return redirect('movie:detail', pk=self.object.pk)
+        return redirect("movie:list")
+        
 
-  
     
 class MovieDetailView(DetailView):
     context_object_name = 'movie'
@@ -67,8 +79,50 @@ class MovieDetailView(DetailView):
     
     
     def get_context_data(self, **kwargs):
+        self.object = self.get_object()
         context = super().get_context_data(**kwargs)
         context["review_form"] = ReviewForm() 
-        context['review'] = ReviewModel.objects.filter(movie=self.object)
+        context["comment_form"] = CommentForm()
+        
+        
+        
+        # data = MovieModel.objects.prefetch_related(
+        #     "movie_comment",
+        #     Prefetch('movie', queryset=ReviewModel.objects.annotate(
+        #         avg=Coalesce(Avg('rating'), 0, output_field=FloatField())
+        #         ))).get(pk=self.object.pk)
+        
+        # comment_list = data.movie_comment.all()
+        
+        # rate = data.movie.avg # sorry for bad naming movie is the ForeignKey for ReviewModel 
+        
+        average_rate = ReviewModel.objects.filter(movie_id=self.object.pk).aggregate(avg_rate=Avg('rating'))['avg_rate']
+
+        comments = CommentModel.objects.filter(movie_id=self.object.pk)
+        
+        context['comments'] = comments
+        
+        context['rate'] = round(average_rate, 1)
         return context
     
+    
+"""
+
+        data = MovieModel.objects.prefetch_related(
+            "movie_comment",
+            Prefetch('movie', queryset=ReviewModel.objects.aggregate(avg_rate=Avg('rating', output_field=FloatField())))
+                ).get(pk=self.object.pk)
+        
+        comment_list = data.movie_comment.all()
+        context['comments'] = comment_list
+        
+        # average_rate = ReviewModel.objects.filter(movie_id=self.object.pk).aggregate(avg_rate=Avg('rating'))['avg_rate']
+        average_rate = data.movie.all().avg_rate
+        
+        
+        context['rate'] = average_rate
+        return context
+    
+
+
+"""

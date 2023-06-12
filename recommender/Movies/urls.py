@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import MovieListView, MovieCreateView, MovieDetailView, MovieReview
+from .views import MovieListView, MovieCreateView, MovieDetailView, MovieReview, MovieComment
 
 app_name = 'movie'
 
@@ -8,4 +8,6 @@ urlpatterns = [
     path('create/', MovieCreateView.as_view(), name="create"),
     path('detail/<int:pk>/', MovieDetailView.as_view(), name='detail'),
     path("detail/<int:pk>/create_review/", MovieReview.as_view(), name="create_review"),
+    path("detail/<int:pk>/create_comment/", MovieComment.as_view(), name="create_comment"),
+    
 ]

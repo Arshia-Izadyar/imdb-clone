@@ -1,13 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from lib.validator import check_rate
+
 class GenreModel(models.Model):
-    title = models.CharField(max_length=35)
+    COMEDY = 1
+    DRAMA = 2
+    HORROR = 3
+    ACTION = 4
+    MAGIC = 5
+    COMIC = 6
+    FANTASY = 7 
+    genre_type = (
+        (COMEDY, "Comedy"),
+        (DRAMA, "Drama"), 
+        (HORROR, "Horror"), 
+        (ACTION, "Action"),
+        (COMIC, "Comic"),
+        (MAGIC, "Magic"), 
+        (FANTASY, "Fantasy")
+    )
+    title = models.PositiveSmallIntegerField(choices=genre_type, default=ACTION)
 
     
     def __str__(self):
-        return self.title
-    
+        return str(self.get_title_display())
 
 
 class MovieModel(models.Model):
@@ -24,12 +41,20 @@ class MovieModel(models.Model):
 class ReviewModel(models.Model):
     movie = models.ForeignKey(MovieModel, related_name="movie", on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='review', on_delete=models.CASCADE)
-    rating = models.DecimalField(max_digits=3, decimal_places=1)
+    rating = models.DecimalField(validators=[check_rate], decimal_places=1, max_digits=4)
     created_at = models.DateTimeField(auto_now_add=True)
     
     
     def __str__(self):
         return str(self.movie.title)
+    
+    
+
+class CommentModel(models.Model):
+    movie = models.ForeignKey(MovieModel, related_name="movie_comment", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+    comment = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     
 class WatchList(models.Model):
