@@ -3,7 +3,8 @@
 {% block body %}
     <h1>Movie List</h1>
     {% for movie in movies %}
-        <ul><p>{{movie.title}}</p></ul>
+        <ul><a href="{% url 'movie:detail' movie.pk %}">{{movie.title}}</a></ul>
     {% endfor %}
+    <a href="{% url 'movie:create' %}">add yor movie<a>
         
 {% endblock body %}

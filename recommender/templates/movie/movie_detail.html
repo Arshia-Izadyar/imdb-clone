@@ -1,0 +1,26 @@
+{% extends "Base.html" %}
+{% block title %}Deatail{% endblock title %}
+{% block body %}
+<h1>Post detail</h1>
+{{movie.title}}
+<h2>review</h2>
+{{review}}
+{% comment %} 
+<ul>
+    {% for rev in review %}
+        <p>{{rev.rate}}</p>
+    {% endfor %}
+</ul> {% endcomment %}
+
+<form method="POST" action="{% url 'movie:create_review' movie.pk %}">
+    {% csrf_token %}
+    {{ review_form.as_p }}
+    <input type="submit" value="ok">
+</form>
+
+
+<div>
+    <a href="{% url 'movie:list' %}">return<a>
+</div>
+
+{% endblock body %}
