@@ -4,14 +4,9 @@ from django.views.generic import ListView, FormView, DetailView
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.views import View
-from django.db.models import Avg, Prefetch, FloatField
-from django.db.models.functions import Coalesce
-
-
 
 from .forms import MovieCreateForm, ReviewForm, CommentForm
-from .models import MovieModel, ReviewModel, CommentModel
+from .models import MovieModel
 
 
 class MovieListView(ListView):
@@ -19,18 +14,16 @@ class MovieListView(ListView):
     queryset = MovieModel.objects.all()
     template_name = "movie/movie_list.html"
     context_object_name = "movies"
-    
-    
+   
+
 class MovieCreateView(FormView):
     success_url = reverse_lazy('movie:list')
     template_name = 'movie/movie_create.html'
     form_class = MovieCreateForm
     
-    
     @method_decorator(login_required())
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
-    
     
     def form_valid(self, form):
         form.save()
@@ -67,7 +60,6 @@ class MovieComment(DetailView):
         return redirect("movie:list")
         
 
-    
 class MovieDetailView(DetailView):
     context_object_name = 'movie'
     model = MovieModel
@@ -77,37 +69,36 @@ class MovieDetailView(DetailView):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
     
-    
     def get_context_data(self, **kwargs):
         self.object = self.get_object()
         context = super().get_context_data(**kwargs)
         context["review_form"] = ReviewForm() 
         context["comment_form"] = CommentForm()
+            
+        data = MovieModel.objects.prefetch_related(
+            "movie_comment",'movie').get(pk=self.object.pk) # can't handel Avg in query so we do it in python
+            
+        rates = data.movie.all()    
+        comment_list = data.movie_comment.all()
         
+        rate_list = [r.rating for r in rates]
         
+        context['comments'] = comment_list  
+        context['rate'] = round(sum(rate_list)/len(rate_list), 1)
+        return context
+    
         
-        # data = MovieModel.objects.prefetch_related(
-        #     "movie_comment",
-        #     Prefetch('movie', queryset=ReviewModel.objects.annotate(
-        #         avg=Coalesce(Avg('rating'), 0, output_field=FloatField())
-        #         ))).get(pk=self.object.pk)
+"""
+
+        for score in scores:
+            pass
         
-        # comment_list = data.movie_comment.all()
-        
-        # rate = data.movie.avg # sorry for bad naming movie is the ForeignKey for ReviewModel 
+        rate = data.movie.avg # sorry for bad naming movie is the ForeignKey for ReviewModel 
         
         average_rate = ReviewModel.objects.filter(movie_id=self.object.pk).aggregate(avg_rate=Avg('rating'))['avg_rate']
 
         comments = CommentModel.objects.filter(movie_id=self.object.pk)
-        
-        context['comments'] = comments
-        
-        context['rate'] = round(average_rate, 1)
-        return context
     
-    
-"""
-
         data = MovieModel.objects.prefetch_related(
             "movie_comment",
             Prefetch('movie', queryset=ReviewModel.objects.aggregate(avg_rate=Avg('rating', output_field=FloatField())))
