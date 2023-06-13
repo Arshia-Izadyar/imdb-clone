@@ -1,9 +1,11 @@
+from typing import Any, Dict
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, FormView, DetailView
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.db.models import Avg
 
 from .forms import MovieCreateForm, ReviewForm, CommentForm
 from .models import MovieModel
@@ -14,8 +16,8 @@ class MovieListView(ListView):
     queryset = MovieModel.objects.all()
     template_name = "movie/movie_list.html"
     context_object_name = "movies"
+    
    
-
 class MovieCreateView(FormView):
     success_url = reverse_lazy('movie:list')
     template_name = 'movie/movie_create.html'
@@ -76,15 +78,14 @@ class MovieDetailView(DetailView):
         context["comment_form"] = CommentForm()
             
         data = MovieModel.objects.prefetch_related(
-            "movie_comment",'movie').get(pk=self.object.pk) # can't handel Avg in query so we do it in python
+            "movie_comment",'movie').get(pk=self.object.pk) 
             
-        rates = data.movie.all()    
         comment_list = data.movie_comment.all()
         
-        rate_list = [r.rating for r in rates]
+        rate = data.movie.aggregate(avg_rating=Avg('rating'))
         
         context['comments'] = comment_list  
-        context['rate'] = round(sum(rate_list)/len(rate_list), 1)
+        context['rate'] = round(rate['avg_rating'], 1)
         return context
     
         

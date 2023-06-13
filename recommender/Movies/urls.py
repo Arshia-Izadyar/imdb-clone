@@ -1,13 +1,13 @@
-from django.urls import path
+from django.urls import path, include
 from .views import MovieListView, MovieCreateView, MovieDetailView, MovieReview, MovieComment
 
 app_name = 'movie'
 
 urlpatterns = [
-    path('list/', MovieListView.as_view(), name="list"),
-    path('create/', MovieCreateView.as_view(), name="create"),
-    path('detail/<int:pk>/', MovieDetailView.as_view(), name='detail'),
+    path('list-movie/', MovieListView.as_view(), name="list"),
+    path('create-movie/', MovieCreateView.as_view(), name="create"),
+    path('detail-movie/<int:pk>/', MovieDetailView.as_view(), name='detail'),
     path("detail/<int:pk>/create_review/", MovieReview.as_view(), name="create_review"),
     path("detail/<int:pk>/create_comment/", MovieComment.as_view(), name="create_comment"),
-    
+    path('api/', include('Movies.api.v1.urls'))
 ]

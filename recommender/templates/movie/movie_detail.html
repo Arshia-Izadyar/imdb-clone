@@ -11,12 +11,15 @@
 {% for comment in comments %}
     <p>{{comment.user}} : {{comment.comment}}</p>
 {% endfor %}
+
+<h3>Add Rate</h3>
 <form method="POST" action="{% url 'movie:create_review' movie.pk %}">
     {% csrf_token %}
     {{ review_form.as_p }}
     <input type="submit" value="ok">
 </form>
 
+<h3>Add Comments</h3>
 <form method="POST" action="{% url 'movie:create_comment' movie.pk %}">
     {% csrf_token %}
     {{comment_form.as_p}}
