@@ -11,6 +11,11 @@ from .forms import MovieCreateForm, ReviewForm, CommentForm
 from .models import MovieModel
 
 
+
+from allauth.account.views import LogoutView
+
+
+
 class MovieListView(ListView):
     model = MovieModel
     queryset = MovieModel.objects.all()
@@ -87,6 +92,18 @@ class MovieDetailView(DetailView):
         context['comments'] = comment_list  
         context['rate'] = round(rate['avg_rating'], 1)
         return context
+    
+
+    
+class CustomLogout(LogoutView):
+    template_name = 'accounts/logout.html'
+    
+    
+    @property
+    def success_url(self):
+        return reverse_lazy('movie:list')
+    
+    
     
         
 """

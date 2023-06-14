@@ -10,11 +10,22 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
+        <nav>
+            {% if user.is_authenticated %}
+            <h3>hello {{request.user}}</h3>
+            <ul>
+                <li><a href="{% url 'movie:list' %}">Home</a></li>
+                <li><a href="{% url 'movie:logout' %}">Logout</a></li>
+                {% else %}
+                <li><a href="{% url 'account_login' %}">Login</a></li>
+                <li><a href="{% url 'account_signup' %}">singup</a></li>
+                {% endif %}
+
+            </ul>
+        </nav>
 
         {% block body %}{% endblock body %}
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+
         
         <script src="" async defer></script>
     </body>

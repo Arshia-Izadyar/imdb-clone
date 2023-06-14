@@ -1,6 +1,7 @@
 from pathlib import Path
 from .local_conf import DATABASE, KEY
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 import os
 
@@ -20,17 +21,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Movies.apps.MoviesConfig',
-    'user_profile.apps.UserProfileConfig',
     'django.contrib.sites',
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    
 
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.google',
-
 
 ]
 
@@ -98,9 +96,19 @@ SOCIALACCOUNT_PROVIDERS = {
 
 ACCOUNT_EMAIL_REQUIRED = True 
 
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
-LOGIN_REDIRECT_URL = '/'
+ACCOUNT_MAX_EMAIL_ADDRESSES = 1
+
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True
+
+LOGIN_REDIRECT_URL = '/movies/list-movie/'
+
+LOGOUT_REDIRECT_URL = '/movies/list-movie/'
+
+ACCOUNT_SIGNUP_REDIRECT_URL = '/movies/list-movie/'
+
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/movies/list-movie/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
 EMAIL_HOST = 'smtp.gmail.com' 
@@ -108,6 +116,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'arshiaa104@gmail.com'  
 EMAIL_HOST_PASSWORD = "qvaldzcxbwmcazni" 
 EMAIL_USE_TLS = True 
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
 
 
 DATABASES = DATABASE

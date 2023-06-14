@@ -1,10 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('movies/',include("Movies.urls")),
     path('api-auth/', include('rest_framework.urls')),
-    path('accounts/', include('allauth.urls')),
-    path('user-profile/', include('user_profile.urls'))
+    path('accounts/', include('allauth.urls')),    
 ]
