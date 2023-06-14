@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from .local_conf import DATABASE, KEY, EMAIL, HOST_PASS, GIT_HUB_CLIENT_ID, GIT_HUB_SECRET
 
 
