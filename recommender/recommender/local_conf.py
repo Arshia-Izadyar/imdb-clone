@@ -11,3 +11,7 @@ DATABASE = {
 
 
 KEY = 'django-insecure-7a2d4)tf2fho8r+ogx8^w5*7fg0#3y@l^()r86d&4op=(5qs^%'
+EMAIL = 'arshiaa104@gmail.com'  
+HOST_PASS = "qvaldzcxbwmcazni" 
+GIT_HUB_CLIENT_ID = 'ba5edcb9d04d4b378019'
+GIT_HUB_SECRET = '3082d1a4b652e4204cd910314a83bb83acae208f'

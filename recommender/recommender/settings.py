@@ -1,5 +1,5 @@
 from pathlib import Path
-from .local_conf import DATABASE, KEY
+from .local_conf import DATABASE, KEY, EMAIL, HOST_PASS, GIT_HUB_CLIENT_ID, GIT_HUB_SECRET
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,8 +79,8 @@ SOCIALACCOUNT_PROVIDERS = {
     'github': {
 
         'APP': {
-            'client_id': 'ba5edcb9d04d4b378019',
-            'secret': '3082d1a4b652e4204cd910314a83bb83acae208f',
+            'client_id': GIT_HUB_CLIENT_ID,
+            'secret': GIT_HUB_SECRET,
             'key': ''
         }
     },
@@ -114,8 +114,8 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/movies/list-movie/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
 EMAIL_HOST = 'smtp.gmail.com' 
 EMAIL_PORT = 587 
-EMAIL_HOST_USER = 'arshiaa104@gmail.com'  
-EMAIL_HOST_PASSWORD = "qvaldzcxbwmcazni" 
+EMAIL_HOST_USER = EMAIL
+EMAIL_HOST_PASSWORD = HOST_PASS
 EMAIL_USE_TLS = True 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
