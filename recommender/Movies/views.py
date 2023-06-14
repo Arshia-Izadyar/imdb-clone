@@ -1,18 +1,17 @@
-from typing import Any, Dict
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, FormView, DetailView
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.db.models import Avg
-
-from .forms import MovieCreateForm, ReviewForm, CommentForm
-from .models import MovieModel
+from django.db.models import Avg, DecimalField, Q
+from django.db.models.functions import Coalesce
 
 
+from .forms import MovieCreateForm, ReviewForm, CommentForm, WatchListForm
+from .models import MovieModel, WatchList
 
-from allauth.account.views import LogoutView
+
+# TODO : reformat redirect
 
 
 
@@ -65,6 +64,26 @@ class MovieComment(DetailView):
             comment.save()
             return redirect('movie:detail', pk=self.object.pk)
         return redirect("movie:list")
+    
+    
+class MovieWatchList(DetailView):
+    model = MovieModel
+    
+    
+    def post(self, request, *args, **kwargs):
+        form = WatchListForm(request.POST)
+        self.object = self.get_object()
+
+        if form.is_valid():
+            if not WatchList.objects.filter(Q(user=self.request.user) & Q(movie=self.object)).exists():
+                watch_list = form.save(commit=False)
+                watch_list.user = self.request.user
+                watch_list.movie = self.object
+                watch_list.save()
+                return redirect('movie:list')
+            else:
+                return redirect('/')
+        return redirect('/')
         
 
 class MovieDetailView(DetailView):
@@ -84,25 +103,14 @@ class MovieDetailView(DetailView):
             
         data = MovieModel.objects.prefetch_related(
             "movie_comment",'movie').get(pk=self.object.pk) 
-            
+            # watch_list
         comment_list = data.movie_comment.all()
         
-        rate = data.movie.aggregate(avg_rating=Avg('rating'))
+        rate = data.movie.aggregate(avg_rating=Coalesce(Avg('rating'), 0, output_field=DecimalField()))
         
         context['comments'] = comment_list  
         context['rate'] = round(rate['avg_rating'], 1)
         return context
-    
-
-    
-class CustomLogout(LogoutView):
-    template_name = 'accounts/logout.html'
-    
-    
-    @property
-    def success_url(self):
-        return reverse_lazy('movie:list')
-    
     
     
         

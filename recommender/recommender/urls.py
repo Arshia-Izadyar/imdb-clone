@@ -7,4 +7,6 @@ urlpatterns = [
     path('movies/',include("Movies.urls")),
     path('api-auth/', include('rest_framework.urls')),
     path('accounts/', include('allauth.urls')),    
+    path('profile/', include('user_profile.urls')),    
+    
 ]

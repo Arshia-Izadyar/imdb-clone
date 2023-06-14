@@ -15,7 +15,8 @@
             <h3>hello {{request.user}}</h3>
             <ul>
                 <li><a href="{% url 'movie:list' %}">Home</a></li>
-                <li><a href="{% url 'movie:logout' %}">Logout</a></li>
+                <li><a href="{% url 'profile:logout' %}">Logout</a></li>
+                <li><a href="{% url 'profile:profile' %}">Profile</a></li>
                 {% else %}
                 <li><a href="{% url 'account_login' %}">Login</a></li>
                 <li><a href="{% url 'account_signup' %}">singup</a></li>
@@ -25,7 +26,6 @@
         </nav>
 
         {% block body %}{% endblock body %}
-
         
         <script src="" async defer></script>
     </body>

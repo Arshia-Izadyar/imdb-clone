@@ -19,6 +19,12 @@
     <input type="submit" value="ok">
 </form>
 
+<h3>watch list</h3>
+<form method="POST" action="{% url 'movie:create_watchlist' movie.pk %}">
+    {% csrf_token %}
+    <input type="submit" value="ok">
+</form>
+
 <h3>Add Comments</h3>
 <form method="POST" action="{% url 'movie:create_comment' movie.pk %}">
     {% csrf_token %}

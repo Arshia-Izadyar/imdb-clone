@@ -1,5 +1,5 @@
-from django.urls import path, include
-from .views import MovieListView, MovieCreateView, MovieDetailView, MovieReview, MovieComment, CustomLogout
+from django.urls import path
+from .views import MovieListView, MovieCreateView, MovieDetailView, MovieReview, MovieComment, MovieWatchList
 
 app_name = 'movie'
 
@@ -9,5 +9,6 @@ urlpatterns = [
     path('detail-movie/<int:pk>/', MovieDetailView.as_view(), name='detail'),
     path("detail/<int:pk>/create_review/", MovieReview.as_view(), name="create_review"),
     path("detail/<int:pk>/create_comment/", MovieComment.as_view(), name="create_comment"),
-    path('logout/', CustomLogout.as_view(), name='logout')
+    path("detail/<int:pk>/create_watchlist/", MovieWatchList.as_view(), name="create_watchlist"),
+    
 ]

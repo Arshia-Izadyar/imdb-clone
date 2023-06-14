@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Movies.apps.MoviesConfig',
+    
     'django.contrib.sites',
 
     'allauth',

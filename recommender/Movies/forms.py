@@ -1,5 +1,5 @@
 from django import forms
-from .models import MovieModel, ReviewModel, CommentModel
+from .models import MovieModel, ReviewModel, CommentModel, WatchList
 
 
 
@@ -19,3 +19,10 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = CommentModel
         fields = ('comment', )
+        
+
+class WatchListForm(forms.ModelForm):
+    class Meta:
+        model = WatchList
+        exclude = ('movie', 'user')
+
