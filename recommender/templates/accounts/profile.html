@@ -1,23 +1,37 @@
 {% extends "accounts/base.html" %}
 {% block extra_head %}
 <h1>Profile</h1>
-<h2>hello {{user.username}}</h2>
-<p>date_joined : {{user.date_joined}}</p>
+
 <ul>
     <li><a href="{% url 'movie:list' %}">Home</a></li>
     <li><a href="{% url 'profile:logout' %}">Logout</a></li>
     <li><a href="{% url 'account_reset_password' %}">Reset Password</a></li>
-
+</ul>
 {% endblock %}
 
 {% block body %}
+<h2>hello {{user.username}}</h2>
+<p>date_joined : {{user.date_joined}}</p>
+<p>is active : {{user.is_active}}</p>
+<p>user email : {{user.email}}</p>
+
+
+<div>
 <h3> Watch List </h3>
 {% for i in watch_list %}
 <li>
     <a href="{% url 'movie:detail' i.movie.pk %}">{{i.movie.title}}</a>
 </li>
 {% endfor %}
+</div>
 
 
+<div>
+    <h3> your comments </h3>
+    {% for comment in comments %}
+        <p>commented : "{{comment.comment}}" for movie : <a href="{% url 'movie:detail' comment.movie.pk %}">{{comment.movie}}</a></p>
+    
+    {% endfor %}
+</div>
 
 {% endblock body %}

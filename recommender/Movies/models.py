@@ -41,7 +41,7 @@ class MovieModel(models.Model):
 class ReviewModel(models.Model):
     movie = models.ForeignKey(MovieModel, related_name="movie", on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='review', on_delete=models.CASCADE)
-    rating = models.DecimalField(validators=[check_rate], decimal_places=1, max_digits=4)
+    rating = models.DecimalField(validators=[check_rate], decimal_places=1, max_digits=4) # validator checks if its 1-100 if not raise
     created_at = models.DateTimeField(auto_now_add=True)
     
     

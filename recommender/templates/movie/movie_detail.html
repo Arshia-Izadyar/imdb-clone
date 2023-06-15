@@ -2,39 +2,47 @@
 {% block title %}Deatail{% endblock title %}
 {% block body %}
 <h1>Post detail</h1>
-{{movie.title}}
-<h2>review</h2>
 
-<p>avg rate : {{rate}}</p>
+<h2>review for {{movie.title}}</h2>
+<div>
+<p>what is this movie about : {{movie.plot}}</p>
+<strong>director : {{movie.director}}</strong>
+</div>
+<h3>avg rate : {{rate}}</h3>
 
 <h3> Comments </h3>
 {% for comment in comments %}
     <p>{{comment.user}} : {{comment.comment}}</p>
 {% endfor %}
 
+<h3>watch list</h3>
+<p> if you add movie to watchlist you can see it in your profile page</p>
+<form method="POST" action="{% url 'movie:create_watchlist' movie.pk %}">
+    {% csrf_token %}
+    <input type="submit" value="ADD MOVIE">
+</form>
+
 <h3>Add Rate</h3>
 <form method="POST" action="{% url 'movie:create_review' movie.pk %}">
     {% csrf_token %}
     {{ review_form.as_p }}
-    <input type="submit" value="ok">
+    <input type="submit" value="RATE">
 </form>
 
-<h3>watch list</h3>
-<form method="POST" action="{% url 'movie:create_watchlist' movie.pk %}">
-    {% csrf_token %}
-    <input type="submit" value="ok">
-</form>
 
 <h3>Add Comments</h3>
 <form method="POST" action="{% url 'movie:create_comment' movie.pk %}">
     {% csrf_token %}
     {{comment_form.as_p}}
-    <input type="submit" value="comment">
+    <input type="submit" value="COMMENT">
 </form>
 
 
 <div>
-    <a href="{% url 'movie:list' %}">return<a>
+    <h3>GOT TO HOME</h3>
+    <button>
+    <a href="{% url 'movie:list' %}">RETURN TO HOME PAGE<a>
+    </button>
 </div>
 
 {% endblock body %}

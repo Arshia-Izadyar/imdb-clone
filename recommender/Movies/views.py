@@ -103,7 +103,8 @@ class MovieDetailView(DetailView):
             
         data = MovieModel.objects.prefetch_related(
             "movie_comment",'movie').get(pk=self.object.pk) 
-            # watch_list
+        
+        
         comment_list = data.movie_comment.all()
         
         rate = data.movie.aggregate(avg_rating=Coalesce(Avg('rating'), 0, output_field=DecimalField()))

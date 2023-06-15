@@ -1,19 +1,13 @@
-from django.shortcuts import render
 from allauth.account.views import LogoutView
-from django.views.generic.detail import SingleObjectMixin
-from django.views.generic import View, ListView, TemplateView
-
-
+from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+
 
     
 class CustomLogout(LogoutView):
     template_name = 'accounts/logout.html'
-
-
 
 
 class ProfileView(TemplateView):
@@ -36,10 +30,4 @@ class ProfileView(TemplateView):
         context["watch_list"] = watch_list
         context["comments"] = comments
         return context
-    
-    # def get(self, request, *args, **kwargs):
-    #             context = self.get_context_data(object=self.object)
-
-    #     return self.render_to_response(context)
-
     
