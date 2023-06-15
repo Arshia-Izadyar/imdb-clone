@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from .local_conf import DATABASE, KEY, EMAIL, HOST_PASS, GIT_HUB_CLIENT_ID, GIT_HUB_SECRET
+from .local_conf import DATABASE, KEY, EMAIL, HOST_PASS, GIT_HUB_CLIENT_ID, GIT_HUB_SECRET, GOOGLE_CLINT_ID, GOOGLE_SECRET, GOOGLE_KEY
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,7 +8,7 @@ import os
 
 SECRET_KEY = KEY
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -88,29 +88,23 @@ SOCIALACCOUNT_PROVIDERS = {
     'google': {
 
         'APP': {
-            'client_id': 'ba5edcb9d04d4b378019',
-            'secret': '456',
-            'key': ''
+            'client_id': GOOGLE_CLINT_ID,
+            'secret': GOOGLE_SECRET,
+            'key': GOOGLE_KEY
         }
     }
 }
 
 
 ACCOUNT_EMAIL_REQUIRED = True 
-
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-
 ACCOUNT_MAX_EMAIL_ADDRESSES = 1
-
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True
-
 LOGIN_REDIRECT_URL = '/movies/list-movie/'
-
 LOGOUT_REDIRECT_URL = '/movies/list-movie/'
-
 ACCOUNT_SIGNUP_REDIRECT_URL = '/movies/list-movie/'
-
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/movies/list-movie/'
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
 EMAIL_HOST = 'smtp.gmail.com' 
