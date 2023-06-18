@@ -5,22 +5,20 @@ from .models import MovieModel, GenreModel, ReviewModel, WatchList
 
 @register(MovieModel)
 class MovieAdmin(ModelAdmin):
-    list_display = ("title", 'genre', 'release_year')
-    list_filter =  ('genre',)
-    
-    
+    list_display = ("title", "genre", "release_year")
+    list_filter = ("genre",)
+
+
 @register(GenreModel)
 class GenreAdmin(ModelAdmin):
-    list_display = ('title',)
-    
-    
+    list_display = ("title",)
+
+
 @register(ReviewModel)
 class ReviewAdmin(ModelAdmin):
+    list_display = ("movie", "user", "rating", "created_at")
 
-    list_display = ('movie', 'user', 'rating', 'created_at')
-    
-    
-    
+
 @register(WatchList)
 class WatchListAdmin(ModelAdmin):
     list_display = ("movie", "user")

@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('Movies', '0002_alter_reviewmodel_rating'),
+        ("Movies", "0002_alter_reviewmodel_rating"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='commentmodel',
-            name='comment',
+            model_name="commentmodel",
+            name="comment",
             field=models.TextField(null=True),
         ),
     ]

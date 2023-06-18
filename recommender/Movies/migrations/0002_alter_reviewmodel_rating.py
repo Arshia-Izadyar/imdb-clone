@@ -5,15 +5,14 @@ import lib.validator
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('Movies', '0001_initial'),
+        ("Movies", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='reviewmodel',
-            name='rating',
+            model_name="reviewmodel",
+            name="rating",
             field=models.DecimalField(decimal_places=1, max_digits=4, validators=[lib.validator.check_rate]),
         ),
     ]
